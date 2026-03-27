@@ -406,4 +406,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+*.json
+
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm+all,macos,windows,flask

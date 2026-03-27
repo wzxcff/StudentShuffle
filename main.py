@@ -1,18 +1,11 @@
 import random
+import json
 
 
-def get_student_names() -> list[str]:
-    students = []
-
-    while True:
-        student_name = input("Enter student name (q to quit): ").lower()
-        if student_name == "q":
-            break
-        students.append(student_name)
-
-    print("All students added")
-
-    return students
+def get_student_names() -> list[dict]:
+    with open("students.json") as file:
+        data = json.load(file)
+    return [student for student in data["students"] if student['active']]
 
 
 def list_shuffle(arr: list, times: int) -> list:
@@ -21,22 +14,28 @@ def list_shuffle(arr: list, times: int) -> list:
     return arr
 
 
-def print_students(students: list[str], start_from: int = 0) -> None:
+def form_priority(students: list[dict]) -> dict:
+    res = {'debtors': list_shuffle([student for student in students if student['debt']], 55),
+           'today_ready': list_shuffle([student for student in students if student['today_ready']], 55)}
+    return res
+
+
+def print_students(students: list[dict], start_from: int = 0) -> None:
     for i, student in enumerate(students):
-        print(f"{i+start_from + 1}. {student}")
+        print(f"{i+start_from + 1}. {student['name']}")
 
 
-print("Enter students with debt:")
-students_with_debt = list_shuffle(get_student_names(), 33)
+def main():
+    priority = form_priority(get_student_names())
 
-print("Enter other students:")
-other_students = list_shuffle(get_student_names(), 33)
+    print("\nStudents with debt (PRIORITY):")
+    print_students(priority['debtors'])
+    print("\nStudents ready for today:")
+    print_students(priority['today_ready'], len(priority['debtors']))
 
-print("\n\nPriority – students with debt")
-print(f"Final order of students:")
-print_students(students_with_debt)
-print("===OTHER STUDENTS===")
-print_students(other_students, len(students_with_debt))
+
+if __name__ == '__main__':
+    main()
 
 
 
