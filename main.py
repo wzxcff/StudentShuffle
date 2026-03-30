@@ -9,15 +9,9 @@ def get_student_names() -> list[dict]:
     return [student for student in data["students"] if student['active']]
 
 
-def list_shuffle(arr: list, times: int) -> list:
-    for i in range(times+1):
-        random.shuffle(arr)
-    return arr
-
-
 def form_priority(students: list[dict]) -> dict:
-    res = {'debtors': list_shuffle([student for student in students if student['debt']], 55),
-           'today_ready': list_shuffle([student for student in students if student['today_ready']], 55)}
+    res = {'debtors': random.shuffle([student for student in students if student['debt']]),
+           'today_ready': random.shuffle([student for student in students if student['today_ready']])}
     return res
 
 
