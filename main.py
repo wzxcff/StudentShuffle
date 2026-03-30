@@ -10,9 +10,16 @@ def get_student_names() -> list[dict]:
 
 
 def form_priority(students: list[dict]) -> dict:
-    res = {'debtors': random.shuffle([student for student in students if student['debt']]),
-           'today_ready': random.shuffle([student for student in students if student['today_ready']])}
-    return res
+    debtors = [student for student in students if student['debt']]
+    today_ready = [student for student in students if student['today_ready']]
+
+    random.shuffle(debtors)
+    random.shuffle(today_ready)
+
+    return {
+        'debtors': debtors,
+        'today_ready': today_ready
+    }
 
 
 def print_students(students: list[dict], start_from: int = 0) -> None:
@@ -25,7 +32,7 @@ def main():
     if not seed:
         seed = datetime.date.today().strftime("%Y%m%d")
 
-    seed = int(seed)
+    random.seed(int(seed))
 
     print(f"Shuffling student with the current seed: {seed}")
 
